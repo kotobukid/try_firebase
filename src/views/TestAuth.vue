@@ -7,7 +7,7 @@ import SignOutButton from "@/components/SignOutButton.vue";
 <template>
   <firebase-auth/>
   <another-component/>
-  <sign-out-button />
+  <sign-out-button/>
 </template>
 
 <style scoped>
