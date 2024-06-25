@@ -1,9 +1,8 @@
-import { createRouter, createWebHistory } from 'vue-router'
+import {createRouter, createWebHashHistory} from 'vue-router'
 import HomeView from '../views/HomeView.vue'
-import TestAuth from "@/components/TestAuth.vue";
 
 const router = createRouter({
-  history: createWebHistory(import.meta.env.BASE_URL),
+  history: createWebHashHistory(import.meta.env.BASE_URL),
   routes: [
     {
       path: '/',
@@ -13,7 +12,7 @@ const router = createRouter({
     {
       path: '/auth',
       name: 'auth',
-      component: TestAuth
+      component: () => import('../views/TestAuth.vue')
     },
     {
       path: '/about',
