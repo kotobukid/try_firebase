@@ -1,24 +1,20 @@
 <script setup lang="ts">
-import {inject, onMounted, ref, type Ref} from "vue";
-import {onAuthStateChanged, type User} from "firebase/auth";
+import {useAuth} from "@/composables/useAuth";
 
-const auth = inject('auth');
-const authenticatedUser: Ref<User> = ref(null);
-
-onMounted(() => {
-  onAuthStateChanged(auth, user => {
-    if (user) {
-      authenticatedUser.value = user;
-    }
-  });
-});
-
+const {user} = useAuth();
 </script>
 
 <template>
-<span v-if="authenticatedUser">your name is {{ authenticatedUser.displayName }}</span>
+<span v-if="user">
+  your name is
+  <span class="name">{{ user.displayName }}</span>
+  .</span>
+  <span v-else>your are not authenticated.</span>
 </template>
 
 <style scoped>
-
+span.name {
+  font-weight: bolder;
+  text-decoration: underline;
+}
 </style>

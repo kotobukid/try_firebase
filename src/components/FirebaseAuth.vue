@@ -1,35 +1,19 @@
 <script setup lang="ts">
-import {inject, ref, onMounted, type Ref} from "vue";
-import {getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, type User} from "firebase/auth";
+import {ref, watch} from "vue";
 import UserDetail from "@/components/UserDetail.vue";
+import {useAuth} from "@/composables/useAuth";
+import type {User} from "firebase/auth";
 
-const auth = inject('auth');
-
-const authenticatedUser: Ref<User> = ref(null);
 const show_detail = ref(false);
+const {signInWithGoogle, user} = useAuth();
 
-onMounted(() => {
-  onAuthStateChanged(auth, user => {
-    if (user) {
-      show_detail.value = true;
-      authenticatedUser.value = user;
-    }
-  });
-});
-
-const signInWithGoogle = async () => {
-  try {
-    const provider = new GoogleAuthProvider();
-    const result = await signInWithPopup(auth, provider);
-
-    const user = result.user;
-    const firebaseIdToken = await user.getIdToken();
-
-    authenticatedUser.value = result.user;
-  } catch (error) {
-    console.error("Authentication Error: ", error);
+watch(user, (next: User, prev) => {
+  if (next) {
+    show_detail.value = true;
+  } else {
+    show_detail.value = false;
   }
-}
+});
 
 </script>
 
@@ -37,9 +21,9 @@ const signInWithGoogle = async () => {
   <div class="firebaseAuth">
     <h1>Firebase Authentication</h1>
     <div v-if="show_detail">
-      <div class="already_authenticated" v-if="authenticatedUser">
+      <div class="already_authenticated" v-if="user">
         <span class="message">you are authenticated.</span>
-        <user-detail :user="authenticatedUser"></user-detail>
+        <user-detail :user="user"></user-detail>
       </div>
       <div class="login_required.not" v-else>
         <span class="message not">You are not authenticated.</span>
