@@ -1,11 +1,14 @@
 import {computed, inject, ref, type Ref} from "vue";
-import type {User} from "firebase/auth";
-import {GoogleAuthProvider, onAuthStateChanged, signInWithPopup, signOut as signOutWithProvider} from "firebase/auth";
+import type {User, Auth} from "firebase/auth";
+import {
+    GoogleAuthProvider, onAuthStateChanged, signInWithPopup, signOut as signOutWithProvider,
+    type UserCredential
+} from "firebase/auth";
 
 
 export const useAuth = () => {
-    const auth = inject('auth');
-    const authenticatedUser: Ref<User> = ref(null);
+    const auth = inject('auth') as Auth;
+    const authenticatedUser: Ref<User | null> = ref(null);
 
     onAuthStateChanged(auth, user => {
         if (user) {
@@ -20,10 +23,10 @@ export const useAuth = () => {
     const signInWithGoogle = async () => {
         login_processing.value = true;
         try {
-            const provider = new GoogleAuthProvider();
-            const result = await signInWithPopup(auth, provider);
+            const provider: GoogleAuthProvider = new GoogleAuthProvider();
+            const result: UserCredential = await signInWithPopup(auth, provider);
 
-            const user = result.user;
+            const user: User | null = result.user;
             const firebaseIdToken = await user.getIdToken();
 
             authenticatedUser.value = result.user;
@@ -38,7 +41,7 @@ export const useAuth = () => {
 
     const signOut = async () => {
         if (authenticatedUser.value) {
-            await signOutWithProvider(auth);
+            await signOutWithProvider(auth as Auth);
         } else {
             alert('ログインしていません');
         }

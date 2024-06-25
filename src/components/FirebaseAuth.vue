@@ -8,7 +8,7 @@ const show_detail = ref(false);
 
 const {signInWithGoogle, user, login_processing} = useAuth();
 
-watch(user, (next: User, prev) => {
+watch(user, (next: User | null, prev: User | null) => {
   if (next) {
     show_detail.value = true;
   } else {
