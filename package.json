@@ -12,7 +12,9 @@
   },
   "dependencies": {
     "firebase": "^10.12.2",
+    "less": "^4.2.0",
     "pinia": "^2.1.7",
+    "pug": "^3.0.3",
     "vue": "^3.4.29",
     "vue-router": "^4.3.3"
   },

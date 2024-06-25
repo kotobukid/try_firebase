@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import {inject, ref, type Ref} from "vue";
 import {getAuth, GoogleAuthProvider, signInWithPopup, type User} from "firebase/auth";
+import UserDetail from "@/components/UserDetail.vue";
 
 const authenticatedUser: Ref<User> = ref(null);
 
@@ -30,12 +31,11 @@ const signInWithGoogle = async () => {
     <h1>this is firebase auth component</h1>
     <div class="already_authenticated" v-if="authenticatedUser">
       <span class="message">you are authenticated.</span>
-      <div class="info">
-        {{ JSON.stringify(authenticatedUser) }}
-      </div>
+      <user-detail :user="authenticatedUser"></user-detail>
     </div>
-    <div class="login_required" v-else>
+    <div class="login_required.not" v-else>
       <span class="message">You are not authenticated.</span>
+      <br>
       <button @click="signInWithGoogle">Login with Google</button>
     </div>
   </div>
@@ -47,14 +47,14 @@ const signInWithGoogle = async () => {
   border: 1px solid grey;
 }
 
-.info {
-  width: 400px;
-  word-break: break-all;
-}
-
 span.message {
   text-decoration: underline;
   color: green;
   background-color: lightblue;
+
+  &.not {
+    color: red;
+    background-color: brown;
+  }
 }
 </style>
