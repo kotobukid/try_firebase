@@ -5,7 +5,8 @@ import {useAuth} from "@/composables/useAuth";
 import type {User} from "firebase/auth";
 
 const show_detail = ref(false);
-const {signInWithGoogle, user} = useAuth();
+
+const {signInWithGoogle, user, login_processing} = useAuth();
 
 watch(user, (next: User, prev) => {
   if (next) {
@@ -20,18 +21,20 @@ watch(user, (next: User, prev) => {
 <template>
   <div class="firebaseAuth">
     <h1>Firebase Authentication</h1>
-    <div v-if="show_detail">
-      <div class="already_authenticated" v-if="user">
-        <span class="message">you are authenticated.</span>
-        <user-detail :user="user"></user-detail>
-      </div>
-      <div class="login_required.not" v-else>
-        <span class="message not">You are not authenticated.</span>
-        <br>
-        <button @click="signInWithGoogle">Login with Google</button>
+    <div v-if="login_processing">認証処理中(非同期)</div>
+    <div v-if="user">
+      <div v-if="show_detail">
+        <div class="already_authenticated">
+          <span class="message">you are authenticated.</span>
+          <user-detail :user="user"></user-detail>
+        </div>
       </div>
     </div>
-    <div v-else>認証処理中(非同期)</div>
+    <div class="login_required.not" v-else>
+      <span class="message not">You are not authenticated.</span>
+      <br>
+      <button @click="signInWithGoogle">Login with Google</button>
+    </div>
   </div>
 </template>
 
