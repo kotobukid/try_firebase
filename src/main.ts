@@ -1,6 +1,6 @@
 import './assets/main.css'
 
-import {type Component, createApp, provide} from 'vue'
+import {type Component, createApp, type App as VueApp} from 'vue'
 import {createPinia} from 'pinia'
 
 import App from './App.vue'
@@ -27,12 +27,12 @@ const firebaseConfig = {
 const firebaseApp: FirebaseApp = initializeApp(firebaseConfig);
 const auth: Auth = getAuth(firebaseApp);
 
-const app: Component = createApp(App)
+const app = createApp(App) as VueApp;
 
 app.use(createPinia())
 app.use(router)
 
-provide('firebase', firebaseApp)
-provide('auth', auth)
+app.provide('firebase', firebaseApp)
+app.provide('auth', auth)
 
 app.mount('#app')
